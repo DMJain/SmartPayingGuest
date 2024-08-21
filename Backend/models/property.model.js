@@ -1,24 +1,48 @@
-const mongoose = require('mongoose');
+const {Schema, model} = require('mongoose');
 
-const propertySchema = new mongoose.Schema(
+const propertySchema = new Schema(
     {
         owner: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
+            type: Schema.Types.ObjectId,
+            ref: 'user',
             required: true,
         },
         name: {
             type: String,
             required: true,
         },
-        address: {
+        plot: {
             type: String,
             required: true,
         },
-        phoneNumber: {
+        street: {
+          type: String,
+          required: true,
+        },
+        city: {
             type: String,
             required: true,
-            unique: true,
+        },
+        state: {
+            type: String,
+            required: true,
+        },
+        country: {
+            type: String,
+            required: true,
+        },
+        lat: {
+            type: String,
+        },
+        lon: {
+            type: String,
+        },
+        pinCode: {
+            type: Number,
+            required: true,
+        },      
+        phoneNumber: {
+            type: String,
             match: /^[6-9]\d{9}$/,
         },
         price: {
@@ -36,12 +60,12 @@ const propertySchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['Open', 'Closed', 'Approved'],
-            default: 'Open',
+            enum: ['pending', 'rejected', 'approved', 'closed'],
+            default: 'pending',
         },
     },
     { timestamps: true }
 );
 
-const Property = mongoose.model('Property', propertySchema);
+const Property = model('property', propertySchema);
 module.exports = Property;

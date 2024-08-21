@@ -1,18 +1,14 @@
-const mongoose = require('mongoose');
+const {Schema, model} = require('mongoose');
 
-const reviewSchema = new mongoose.Schema({
+const reviewSchema = new Schema({
     property: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Property',
+        type: Schema.Types.ObjectId,
+        ref: 'property',
         required: true,
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
-    username: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'user',
         required: true,
     },
     rating: {
@@ -30,5 +26,5 @@ const reviewSchema = new mongoose.Schema({
 reviewSchema.index({ property: 1, user: 1 }); //--> // user can add multiple reviews per property without adding {unique:true}
 //If you want each user to post only one review per property,add {unique:true}
 
-const Review = mongoose.model('Review', reviewSchema);
+const Review = model('review', reviewSchema);
 module.exports = Review;

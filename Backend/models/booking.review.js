@@ -1,14 +1,14 @@
-const mongoose = require('mongoose');
+const {Schema, model} = require('mongoose');
 
-const bookingSchema = new mongoose.Schema({
+const bookingSchema = new Schema({
     property: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Property',
+        type: Schema.Types.ObjectId,
+        ref: 'property',
         required: true,
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: Schema.Types.ObjectId,
+        ref: 'user',
         required: true,
     },
     bookingDate: {
@@ -17,8 +17,8 @@ const bookingSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Confirmed', 'Cancelled'],
-        default: 'Pending',
+        enum: ['pending', 'confirmed', 'cancelled'],
+        default: 'pending',
     },
 });
 
@@ -29,5 +29,5 @@ bookingSchema.index({ property: 1, user: 1 }, { unique: true });
 // With { unique: true }:
 // The index not only optimizes queries but also enforces a business rule (e.g., a user can only book a property once).
 
-const Booking = mongoose.model('Booking', bookingSchema);
+const Booking = model('booking', bookingSchema);
 module.exports = Booking;

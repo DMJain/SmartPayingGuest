@@ -1,0 +1,50 @@
+const { signUpValidator,  signInValidator} = require('../lib/validators/auth.validator');
+const AuthService = require('../services/auth.services');
+
+async function signUp(req, res) {
+    const validatedReq = await signUpValidator.safeParseAsync(req.body);
+
+    if (validatedReq.error)
+        return res.status(400).json({ error: validatedReq.error });
+
+    const { firstName, lastName, email, password } = validatedReq.data;
+
+    try {
+        const token = await AuthService.signUpService({
+            firstName,
+            lastName,
+            email,
+            password,
+        });
+
+        return res.status(201).json({ status: 'success', data: { token } });
+    } catch (err) {
+        console.log(`Error`, err);
+        return res
+            .status(500)
+            .json({ status: 'error', error: 'Internal Server Error' });
+    }
+}
+
+async function signIn(req, res) {
+    const validatedReq = await signInValidator.safeParseAsync(req.body);
+
+    if (validatedReq.error)
+        return res.status(400).json({ error: validatedReq.error });
+
+    const { email, password } = validatedReq.data;
+
+    try {
+        const token = await AuthService.signInService({ email, password });
+
+        return res.status(200).json({ status: 'success', data: { token } });
+    } catch (err) {
+        console.log(`Error`, err);
+        return res
+            .status(500)
+            .json({ status: 'error', error: 'Internal Server Error' });
+    }
+}
+
+
+module.exports = { signUp, signIn };

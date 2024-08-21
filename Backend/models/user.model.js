@@ -5,6 +5,7 @@ const userSchema = new Schema(
         firstName: {
             type: String,
             required: true,
+            min: 2,
         },
         lastName: {
             type: String,
@@ -20,11 +21,9 @@ const userSchema = new Schema(
                 'Please fill a valid email address',
             ],
         },
-        phoneNumber: {
+        salt: {
             type: String,
             required: true,
-            unique: true,
-            match: /^[6-9]\d{9}$/, // Regex pattern to ensure the number starts with 6-9 and is exactly 10 digits
         },
         password: {
             type: String,
@@ -32,15 +31,12 @@ const userSchema = new Schema(
         },
         role: {
             type: String,
-            enum: ['user', 'admin', 'owner'],
+            enum: ['user', 'admin'],
             default: 'user',
         },
-        salt: {
-            type: String,
-            required: true,
-        },
+        
     },
     { timestamps: true }
 );
-const User = model('User', userSchema);
+const User = model('user', userSchema);
 module.exports = User;

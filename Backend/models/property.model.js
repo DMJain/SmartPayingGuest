@@ -1,5 +1,7 @@
 const {Schema, model} = require('mongoose');
 
+const {amenities} = require('../lib/constant');
+
 const propertySchema = new Schema(
     {
         owner: {
@@ -51,6 +53,7 @@ const propertySchema = new Schema(
         },
         amenities: {
             type: [String],
+            enum: amenities,
         },
         description: {
             type: String,

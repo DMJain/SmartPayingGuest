@@ -68,6 +68,7 @@ class AuthService {
     } catch (err) {
       return false;
     }
+
   }
 }
 

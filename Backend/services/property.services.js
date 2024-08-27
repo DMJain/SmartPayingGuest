@@ -12,6 +12,10 @@ class PropertyService {
     static findAll(owner){
         return Property.find({owner : owner});
     }
+
+    static async update(id, data){
+        return Property.findByIdAndUpdate(id, data, {new: true});
+    }
 }
 
 module.exports = PropertyService;

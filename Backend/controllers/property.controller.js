@@ -1,4 +1,4 @@
-const { propertyValidator } = require("../lib/validators/property.validator");
+const { propertyValidator , propertyUpdateValidator} = require("../lib/validators/property.validator");
 const PropertyService = require("../services/property.services")
 
 
@@ -12,6 +12,23 @@ async function createProperty(req, res) {
 
     try{
         const property = await PropertyService.create(validateReq.data);
+        return res.status(201).json({ status: 'success', data: property });
+    } catch (err) {
+        console.log('Error', err);
+        return res.status(500).json({ status: 'error', error: 'Internal Server Error' });
+    }
+}
+
+async function updateProperty(req, res) {
+    const id = req.params.id;
+    const validateReq = await propertyUpdateValidator.safeParseAsync(req.body);
+
+    if (validateReq.error) {
+        return res.status(400).json({ error: validateReq.error });
+    }
+
+    try{
+        const property = await PropertyService.update(id, validateReq.data);
         return res.status(201).json({ status: 'success', data: property });
     } catch (err) {
         console.log('Error', err);
@@ -40,4 +57,5 @@ module.exports = {
     createProperty,
     getPropertyByID,
     getAllProperties,
+    updateProperty
 };

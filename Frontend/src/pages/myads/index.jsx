@@ -141,4 +141,8 @@ const ManageBookings = () => {
 //     );
 // };
 
+const ViewPgs = () => {
+    return <>view PG's</>;
+};
+
 export default MyAdsPage;

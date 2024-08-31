@@ -1,6 +1,7 @@
 import { apiInstance } from '../api/index';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 
+// Hook to create a new PG
 export const usePostPg = () => {
     const queryClient = useQueryClient();
 
@@ -33,11 +34,36 @@ export const usePostPg = () => {
                 description,
                 images,
             });
-            return data.data;
+            return data.data; // Assuming the data structure has a `data` property
         },
         onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['PG'] });
+            await queryClient.invalidateQueries(['PG']); // Invalidate the `PG` query
+        },
+        onError: (error) => {
+            console.error('Error posting PG:', error);
         },
     });
+
     return mutation;
+};
+
+// Hook to get PGs by owner
+export const UsegetPGByOwner = () => {
+    return useQuery({
+        queryKey: ['PG'],
+        queryFn: async () => {
+            try {
+                const { data } = await apiInstance.get('/user/property');
+                if (data.status === 'success') {
+                    return data.data || []; // Ensure a default empty array if `user` is undefined
+                } else {
+                    console.warn('Failed to fetch PGs:', data.message);
+                    return []; // Return an empty array on failure
+                }
+            } catch (error) {
+                console.error('Error fetching PGs:', error); // Handle errors
+                return []; // Return an empty array on error
+            }
+        },
+    });
 };

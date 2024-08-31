@@ -2,15 +2,30 @@ const Property = require('../models/property.model');
 
 class PropertyService {
     static async create(data) {
-        return await Property.create(data);
+        try {
+            return await Property.create(data);
+        } catch (err) {
+            console.error('Error creating property:', err);
+            throw err;
+        }
     }
 
-    static getById(id){
-        return Property.findById(id);
+    static async getById(id) {
+        try {
+            return await Property.findById(id);
+        } catch (err) {
+            console.error('Error fetching property by ID:', err);
+            throw err;
+        }
     }
 
-    static findAll(owner){
-        return Property.find({owner : owner});
+    static async findAll(owner) {
+        try {
+            return await Property.find({ owner });
+        } catch (err) {
+            console.error('Error fetching properties for owner:', err);
+            throw err;
+        }
     }
 
     static async update(id, data){

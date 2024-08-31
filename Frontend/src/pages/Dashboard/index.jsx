@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoggedInUser } from '../../hooks/auth.hooks';
-import OwnerDashboard from './owner.dashboard';
-import UserDashboard from './user.dashboard';
+// import OwnerDashboard from './owner.dashboard';
+// import UserDashboard from './user.dashboard';
 import AdminDashboard from './admin.dashboard';
+import HomePage from '../Homepage/HomePage';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ const DashboardPage = () => {
     return (
         <>
             {user.role === 'admin' && <AdminDashboard />}
-            {user.role === 'user' && <UserDashboard />}
+            {user.role === 'user' && <HomePage />}
         </>
     );
 };

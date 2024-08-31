@@ -74,7 +74,7 @@ const SignInPage = () => {
             >
                 <Box display="flex" justifyContent="center" mb={3}>
                     <img
-                        src="https://ik.imagekit.io/tej/StayNestLogo.png?updatedAt=1724339358442"
+                        src="https://firebasestorage.googleapis.com/v0/b/staynest-uploading-images.appspot.com/o/logoStayNest.png?alt=media&token=e8e040b2-cad3-45cb-b2c9-2c1696da3608"
                         alt="Logo"
                         style={{ maxHeight: '70px' }}
                     />

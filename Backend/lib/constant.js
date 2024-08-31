@@ -11,7 +11,7 @@ const amenities = [
     'TV',
     'Fridge',
     'Microwave',
-    'Washing Machine',
+    'WashingMachine',
     'Dishwasher',
     'Oven',
     'Balcony',
@@ -28,5 +28,4 @@ const amenities = [
     'Bachelor Friendly',
 ];
 
-
-module.exports = {amenities};
+module.exports = { amenities };

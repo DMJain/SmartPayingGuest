@@ -27,6 +27,10 @@ class PropertyService {
             throw err;
         }
     }
+
+    static async update(id, data){
+        return Property.findByIdAndUpdate(id, data, {new: true});
+    }
 }
 
 module.exports = PropertyService;

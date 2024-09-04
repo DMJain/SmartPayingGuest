@@ -19,9 +19,9 @@ class PropertyService {
         }
     }
 
-    static async findAll(owner) {
+    static async findAll(payload) {
         try {
-            return await Property.find({ owner });
+            return await Property.find(payload);
         } catch (err) {
             console.error('Error fetching properties for owner:', err);
             throw err;

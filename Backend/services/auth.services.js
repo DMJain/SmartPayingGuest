@@ -19,8 +19,6 @@ class AuthService {
 
     const salt = randomBytesGenerator(16);
 
-    console.log(firstName, lastName, email, password, salt);
-
     try {
       const user = await User.create({
         firstName,

@@ -3,6 +3,8 @@ const cors = require('cors');
 
 const authRoutes = require('../routes/auth.routes');
 const userRoutes = require('../routes/user.routes');
+const ownerRoutes = require('../routes/owner.routes');
+const bookingRoutes = require('../routes/booking.routes');
 const { authenticationMiddleware } = require('../middleware/auth.middleware');
 
 
@@ -22,5 +24,7 @@ app.get("/", (req, res) =>
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/owner', ownerRoutes);
+app.use('/booking', bookingRoutes);
 
 module.exports = app;

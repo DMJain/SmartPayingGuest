@@ -20,7 +20,7 @@ export const usePostPg = () => {
             description,
             images,
         }) => {
-            const { data } = await apiInstance.post('/user/property/create', {
+            const { data } = await apiInstance.post('/owner/property/create', {
                 name,
                 plot,
                 street,
@@ -53,7 +53,7 @@ export const UsegetPGByOwner = () => {
         queryKey: ['PG'],
         queryFn: async () => {
             try {
-                const { data } = await apiInstance.get('/user/property');
+                const { data } = await apiInstance.get('/owner/property');
                 if (data.status === 'success') {
                     return data.data || []; // Ensure a default empty array if `user` is undefined
                 } else {

@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose');
+const { date, string } = require('zod');
 
 const bookingSchema = new Schema({
     property: {
@@ -6,14 +7,18 @@ const bookingSchema = new Schema({
         ref: 'property',
         required: true,
     },
+    propertyOwner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
     },
-    bookingDate: {
-        type: Date,
-        required: true,
+    date: {
+        type: String,
     },
     status: {
         type: String,

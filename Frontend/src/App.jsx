@@ -9,8 +9,8 @@ import DashboardPage from './pages/Dashboard';
 import Navbar from './pages/Navbar';
 import MyAdsPage from './pages/myads';
 import './App.css';
-import HomePage from './pages/Homepage/HomePage';
-import PostPGForm from './pages/myads/PostPGForm';
+import HomePage from './pages/Homepage/HomePage.jsx';
+import PostPGForm from './pages/myads/PostPGform.jsx';
 
 function App() {
     const [isDarkMode, setIsDarkMode] = useState(

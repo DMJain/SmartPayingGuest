@@ -51,15 +51,27 @@ async function getPropertyByID(req, res) {
     return res.status(200).json({ status: 'success', data: property });
 }
 
-async function getAllProperties(req, res) {
-    const properties = await PropertyService.findAll(req.user._id);
+async function getAllOwnerProperties(req, res) {
+    console.log(req.user._id);
+    const properties = await PropertyService.findAll({owner : req.user._id});
 
     return res.status(200).json({ status: 'success', data: properties });
 }
+
+async function getAllProperties(req, res) {
+    const {city = null} = req.query;
+    const properties = city 
+        ? await PropertyService.findAll({status: 'approved', city : city})
+        : await PropertyService.findAll({status: 'approved'});
+
+    return res.status(200).json({ status: 'success', data: properties });
+}
+
 
 module.exports = {
     createProperty,
     getPropertyByID,
     getAllProperties,
+    getAllOwnerProperties,
     updateProperty
 };

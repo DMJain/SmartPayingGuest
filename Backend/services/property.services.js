@@ -31,6 +31,10 @@ class PropertyService {
     static async update(id, data){
         return Property.findByIdAndUpdate(id, data, {new: true});
     }
+
+    static async delete(id){
+        return Property.findByIdAndUpdate(id, {isDeleted: true, status: 'closed'}, {new: true});
+    }
 }
 
 module.exports = PropertyService;

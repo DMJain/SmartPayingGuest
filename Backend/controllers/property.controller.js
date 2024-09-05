@@ -1,6 +1,7 @@
 
 const { propertyValidator } = require('../lib/validators/property.validator');
 const PropertyService = require('../services/property.services');
+const BookingService = require('../services/booking.services');
 
 async function createProperty(req, res) {
     req.body.owner = req.user._id;
@@ -67,11 +68,24 @@ async function getAllProperties(req, res) {
     return res.status(200).json({ status: 'success', data: properties });
 }
 
+async function deleteProperty(req, res) {
+    const id = req.params.id;
+    try{
+        await PropertyService.delete(id);
+        await BookingService.cancelAllBookings(id);
+        return res.status(200).json({ status: 'success', message: 'Property deleted successfully' });
+    } catch (err) {
+        console.log('Error', err);
+        return res.status(500).json({ status: 'error', error: 'Internal Server Error' });
+    }
+}
+
 
 module.exports = {
     createProperty,
     getPropertyByID,
     getAllProperties,
     getAllOwnerProperties,
-    updateProperty
+    updateProperty,
+    deleteProperty
 };

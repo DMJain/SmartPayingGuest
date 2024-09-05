@@ -14,7 +14,7 @@ const createBooking = async (req, res) => {
     }
 }
 
-const getBookings = async (req, res) => {
+const getBookingsPerProperty = async (req, res) => {
     const user = req.user._id;
     const propertyId = req.params.id;
     try {
@@ -26,4 +26,37 @@ const getBookings = async (req, res) => {
     }
 }
 
-module.exports = {createBooking, getBookings};
+const getAllOwnerBookings = async (req, res) => {
+    const owner = req.user._id;
+    try {
+        const bookings = await BookingService.getAll({propertyOwner: owner});
+        return res.status(200).json({ status: 'success', data: bookings });
+    } catch (err) {
+        console.log('Error', err);
+        return res.status(500).json({ status: 'error', error: 'Internal Server Error' });
+    }
+}
+
+const cancelBooking = async (req, res) => {
+    const bookingId = req.params.bookingId;
+    try {
+        const booking = await BookingService.cancelBooking(bookingId);
+        return res.status(200).json({ status: 'success', data: booking });
+    } catch (err) {
+        console.log('Error', err);
+        return res.status(500).json({ status: 'error', error: 'Internal Server Error' });
+    }
+}
+
+const getAllUserBookings = async (req, res) => {
+    const user = req.user._id;
+    try {
+        const bookings = await BookingService.getAll({user: user});
+        return res.status(200).json({ status: 'success', data: bookings });
+    } catch (err) {
+        console.log('Error', err);
+        return res.status(500).json({ status: 'error', error: 'Internal Server Error' });
+    }
+}
+
+module.exports = {createBooking, getBookingsPerProperty, getAllOwnerBookings, cancelBooking, getAllUserBookings};

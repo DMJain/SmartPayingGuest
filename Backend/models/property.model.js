@@ -66,6 +66,10 @@ const propertySchema = new Schema(
             enum: ['pending', 'rejected', 'approved', 'closed'],
             default: 'pending',
         },
+        isDeleted: {
+            type: Boolean,
+            default: false,
+        },
     },
     { timestamps: true }
 );

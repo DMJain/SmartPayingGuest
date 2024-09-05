@@ -16,6 +16,15 @@ class BookingService {
     static async getAll(payload) {
         return await booking.find(payload);
     }
+
+    static async cancelAllBookings(propertyId) {
+        return await booking.updateMany({property: propertyId}, {status: 'cancelled'});
+    }
+
+    static async cancelBooking(bookingId) {
+        return await booking.findByIdAndUpdate(bookingId, {status: 'cancelled'}, {new: true});
+    }
+
 }
 
 module.exports = BookingService;

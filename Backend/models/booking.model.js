@@ -2,33 +2,39 @@ const {Schema, model} = require('mongoose');
 const { date, string } = require('zod');
 
 const bookingSchema = new Schema({
-    property: {
+    propertyId: {
         type: Schema.Types.ObjectId,
         ref: 'property',
         required: true,
     },
-    propertyOwner: {
+    propertyOwnerId: {
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
     },
-    user: {
+    userId: {
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
     },
     date: {
         type: String,
+        required: true,
     },
     status: {
         type: String,
         enum: ['pending', 'confirmed', 'cancelled'],
         default: 'pending',
     },
+    paymentId: {
+        type: String,
+        required: true,
+        unique: true,
+    },
 });
 
 // Index for property and user fields
-bookingSchema.index({ property: 1, user: 1 }, { unique: true });
+bookingSchema.index({ propertyId: 1, userId: 1 }, { unique: true });
 // Without { unique: true }:
 // The index would still optimize queries, but it wouldn’t prevent multiple bookings by the same user for the same property.
 // With { unique: true }:

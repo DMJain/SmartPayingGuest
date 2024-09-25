@@ -23,7 +23,8 @@ const SignInPage = () => {
 
     useEffect(() => {
         if (user && !isLoading) {
-            navigate('/dashboard'); // Redirect to dashboard if already logged in
+            if (user.role === 'admin') navigate('/admin');
+            else navigate('/');
         }
     }, [user, navigate, isLoading]);
 
@@ -52,106 +53,64 @@ const SignInPage = () => {
         }
     };
 
+    const toSignUpPage = () => {
+        navigate('/sign-up')
+    }
+
     return (
-        <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            minHeight="100vh"
-            sx={{ padding: 3, backgroundColor: 'background.default' }}
-        >
-            <Box
-                component="form"
-                onSubmit={handleFormSubmit}
-                sx={{
-                    padding: 4,
-                    boxShadow: 3,
-                    borderRadius: 2,
-                    backgroundColor: 'background.paper',
-                    maxWidth: 400,
-                    width: '100%',
-                }}
-            >
-                <Box display="flex" justifyContent="center" mb={3}>
-                    <img
-                        src="https://firebasestorage.googleapis.com/v0/b/staynest-uploading-images.appspot.com/o/logoStayNest.png?alt=media&token=e8e040b2-cad3-45cb-b2c9-2c1696da3608"
-                        alt="Logo"
-                        style={{ maxHeight: '70px' }}
-                    />
-                </Box>
-                <Typography
-                    variant="h3"
-                    align="center"
-                    sx={{
-                        fontSize: '1.5rem',
-                        fontWeight: '500',
-                        fontFamily: 'sans-serif',
-                    }}
-                    gutterBottom
-                >
-                    Sign In to StayNest
-                </Typography>
-
-                {errorMessage && (
-                    <Alert severity="error" sx={{ mb: 2 }}>
-                        {errorMessage}
-                    </Alert>
-                )}
-
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            name="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            fullWidth
-                            label="Email Address"
-                            type="email"
-                            required
-                            error={
-                                !!errorMessage && !/\S+@\S+\.\S+/.test(email)
-                            }
-                            helperText={
-                                !!errorMessage && !/\S+@\S+\.\S+/.test(email)
-                                    ? 'Enter a valid email address'
-                                    : undefined
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            name="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            fullWidth
-                            label="Password"
-                            type="password"
-                            required
-                            error={!!errorMessage}
-                            helperText={
-                                errorMessage
-                                    ? 'Password might be incorrect'
-                                    : undefined
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            startIcon={
-                                isSubmitting && <CircularProgress size={20} />
-                            }
-                        >
-                            {isSubmitting ? 'Signing In...' : 'Sign In'}
-                        </Button>
-                    </Grid>
-                </Grid>
-            </Box>
-        </Box>
+        <div className="hero min-h-screen">
+            <div className="hero-content flex-col lg:flex-row-reverse">
+                <div className="text-center lg:text-left">
+                    <h1 className="text-5xl font-bold">Login now!</h1>
+                    <p className="py-6">
+                    Tired of the hassle of finding a suitable PG? Our user-friendly platform offers a wide range of verified PG options tailored to your needs. Quickly search, compare, and book your ideal PG in just a few clicks. Login now to explore the best PGs in your city and enjoy a hassle-free accommodation experience
+                    </p>
+                </div>
+                <div className="card bg-base-100 border border-base-200 w-full max-w-sm shrink-0 shadow-2xl">
+                    <form className="card-body">
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Email</span>
+                            </label>
+                            <input
+                                type="email"
+                                placeholder="email"
+                                className="input input-bordered"
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text">Password</span>
+                            </label>
+                            <input
+                                type="password"
+                                placeholder="password"
+                                className="input input-bordered"
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            {/* <label className="label">
+                                <a
+                                    href="#"
+                                    className="label-text-alt link link-hover"
+                                >
+                                    Forgot password?
+                                </a>
+                            </label> */}
+                        </div>
+                        <div className="form-control mt-6">
+                            <button className="btn btn-primary" onClick={handleFormSubmit}>Login</button>
+                        </div>
+                        <div className="divider">OR</div>
+                        <div className="form-control">
+                            <button className="btn btn-outline btn-primary" onClick={toSignUpPage}>SIGN-UP!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 };
 

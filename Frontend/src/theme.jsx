@@ -24,7 +24,7 @@ const darkTheme = createTheme({
             main: '#FF9800', // Orange color
         },
         background: {
-            default: '#303030', // Dark background color
+            default: '#FF9800', // Dark background color
             paper: '#424242', // Dark paper color
             inverse: '#ffffff',
         },

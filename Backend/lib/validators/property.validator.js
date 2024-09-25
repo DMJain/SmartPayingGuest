@@ -4,6 +4,7 @@ const {amenities} = require('../constant')
 
 const propertyValidator = z.object({
     owner: z.string(),
+    ownerName: z.string(),
     name: z.string().min(2).max(64),
     plot: z.string(),
     street: z.string(),
@@ -22,6 +23,7 @@ const propertyValidator = z.object({
 
 const propertyUpdateValidator = z.object({
     owner: z.string().optional(),
+    ownerName: z.string().optional(),
     name: z.string().min(2).max(64).optional(),
     plot: z.string().optional(),
     street: z.string().optional(),

@@ -25,9 +25,9 @@ const SignupPage = () => {
     const [passwordError, setPasswordError] = useState('');
 
     useEffect(() => {
-        console.log(user, isLoading);
         if (user && !isLoading) {
-            navigate('/dashboard'); // Redirect to dashboard if already logged in
+            if(user.role === "admin") navigate('/admin');
+            else navigate('/');
         }
     }, [user, navigate, isLoading]);
 

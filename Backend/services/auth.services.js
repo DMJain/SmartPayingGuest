@@ -34,7 +34,7 @@ class AuthService {
       });
       return token;
     } catch (err) {
-      console.log("Error", err);
+      console.log("Error creating", err);
       throw new Error("Internal Server Error");
     }
   }

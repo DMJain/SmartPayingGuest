@@ -9,6 +9,10 @@ const propertySchema = new Schema(
             ref: 'user',
             required: true,
         },
+        ownerName:{
+            type: String,
+            required: true,
+        },
         name: {
             type: String,
             required: true,

@@ -1,61 +1,38 @@
-import { useState, useMemo, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { lightTheme, darkTheme } from './theme';
-import { Box } from '@mui/material';
+
+import Navbar from './components/NavBar';
 import SigninPage from './pages/sign-in';
 import SignupPage from './pages/sign-up';
-import DashboardPage from './pages/Dashboard';
-import Navbar from './pages/Navbar';
-import MyAdsPage from './pages/myads';
+import HomePage from './pages/Homepage';
+import ExplorePage from './pages/ExplorePage';
+import PgDetailPage from './pages/PgDetailPage';
+import CreatePage from './pages/CreatePage';
+import BookingPage from './pages/bookingPage';
+import AdminDashBoard from './pages/AdminDashBoard';
+import UserDashBoard from './pages/UserDashBoard';
+
 import './App.css';
-import HomePage from './pages/Homepage/HomePage.jsx';
-import PostPGForm from './pages/myads/PostPGform.jsx';
+import OnSuccess from './pages/bookingPage/onSuccess';
 
 function App() {
-    const [isDarkMode, setIsDarkMode] = useState(
-        () => JSON.parse(localStorage.getItem('isDarkMode')) || false
-    );
-
-    useEffect(() => {
-        localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
-    }, [isDarkMode]);
-
-    const toggleTheme = () => {
-        setIsDarkMode((prevMode) => !prevMode);
-    };
-
-    const theme = useMemo(
-        () => (isDarkMode ? darkTheme : lightTheme),
-        [isDarkMode]
-    );
-
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            {/* Layout container for Navbar and page content */}
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100vh',
-                }}
-            >
-                <Navbar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-                <Box component="main" sx={{ flexGrow: 1, mt: '64px' }}>
-                    {' '}
-                    {/* Adjust '64px' if Navbar height changes */}
-                    <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/dashboard" element={<DashboardPage />} />
-                        <Route path="/sign-in" element={<SigninPage />} />
-                        <Route path="/sign-up" element={<SignupPage />} />
-                        <Route path="/myads" element={<MyAdsPage />} />
-                        <Route path="/post-your-pg" element={<PostPGForm />} />
-                    </Routes>
-                </Box>
-            </Box>
-        </ThemeProvider>
+        <>
+            <Navbar />
+            <div className="p-5">
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/explore" element={<ExplorePage />} />
+                    <Route path="/sign-in" element={<SigninPage />} />
+                    <Route path="/sign-up" element={<SignupPage />} />
+                    <Route path="/ad/:id" element={<PgDetailPage />} />
+                    <Route path="/create-ad" element={<CreatePage />} />
+                    <Route path="/booking" element={<BookingPage />} />
+                    <Route path="/admin" element={<AdminDashBoard />} />
+                    <Route path="/user" element={<UserDashBoard />} />
+                    <Route path="/success" element={<OnSuccess />} />
+                </Routes>
+            </div>
+        </>
     );
 }
 

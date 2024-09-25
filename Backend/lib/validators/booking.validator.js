@@ -1,8 +1,25 @@
-const {z} = require('zod')
+const { z } = require('zod')
 
-const bookingValidator = z.object({
-    property: z.string(),
-    date: z.string().optional(),
+const bookingCreationValidationSchema = z.object({
+  propertyId: z.string(),
+  date: z.string(),
+  totalPrice: z.string(),
 })
 
-module.exports = {bookingValidator};
+const verifyPaymentValidationSchema = z.object({
+    propertyId: z.string(),
+    date: z.string(),
+    orderId: z.string(),
+})
+
+const createBookingValidationSchema = z.object({
+    propertyId: z.string(),
+  date: z.string(),
+  paymentId: z.string(),
+})
+
+module.exports = {
+  bookingCreationValidationSchema,
+  verifyPaymentValidationSchema,
+  createBookingValidationSchema,
+}

@@ -77,7 +77,8 @@ const Navbar = memo(() => {
       }
 
     return (
-        <div className="navbar bg-primary text-primary-content">
+        <div className='flex justify-center bg-primary'>
+        <div className="navbar bg-primary text-primary-content w-3/5">
             <div className="flex-1">
                 <a
                     className="btn btn-ghost bg-base-100 rounded-full h-12"
@@ -161,17 +162,11 @@ const Navbar = memo(() => {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[10] mt-3 w-52 p-2 shadow"
                         >
                             <li>
-                                <a className="justify-between">
-                                    Profile
-                                    <span className="badge">New</span>
-                                </a>
-                            </li>
-                            <li>
                                 <a className="justify-between" onClick={() => navigate('/user')}>
-                                    MyAds
+                                    My Account
                                 </a>
                             </li>
                             <li>
@@ -195,6 +190,7 @@ const Navbar = memo(() => {
                     </button>
                 )}
             </div>
+        </div>
         </div>
     );
 });

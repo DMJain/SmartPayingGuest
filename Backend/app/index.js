@@ -5,6 +5,7 @@ const authRoutes = require('../routes/auth.routes');
 const userRoutes = require('../routes/user.routes');
 const ownerRoutes = require('../routes/owner.routes');
 const bookingRoutes = require('../routes/booking.routes');
+const adminRoutes = require('../routes/admin.routes');
 const { authenticationMiddleware } = require('../middleware/auth.middleware');
 
 
@@ -26,5 +27,6 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/owner', ownerRoutes);
 app.use('/booking', bookingRoutes);
+app.use('/admin', adminRoutes)
 
 module.exports = app;

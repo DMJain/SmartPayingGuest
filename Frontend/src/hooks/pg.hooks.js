@@ -84,3 +84,57 @@ export const useGetPgByQuery = (query) => {
         }
     })
 }
+
+export const useGetPgToReview = () => {
+    return useQuery({
+        queryKey: ['PG'],
+        queryFn: async () => {
+            try {
+                const { data } = await apiInstance.get('/admin/review');
+                return data.data || [];
+            } catch (error) {
+                console.error('Error fetching PGs:', error);
+                return [];
+            }
+        }
+    })
+}
+
+export const useStatusChange = () => {
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: async ({
+            status,
+            id,
+        }) => {
+            const { data } = await apiInstance.post(`/admin/status/${id}`, {
+                status,
+            });
+            return data.data; // Assuming the data structure has a `data` property
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries(['PG']); // Invalidate the `PG` query
+        },
+        onError: (error) => {
+            console.error('Error posting PG:', error);
+        },
+    });
+
+    return mutation;
+};
+
+export const useGetPGDetail = (id) => {
+    return useQuery({
+        queryKey: ['PG', id],
+        queryFn: async () => {
+            try {
+                const { data } = await apiInstance.get(`/user/property/${id}`);
+                return data.data || [];
+            } catch (error) {
+                console.error('Error fetching PGs:', error);
+                return [];
+            }
+        }
+    })
+}

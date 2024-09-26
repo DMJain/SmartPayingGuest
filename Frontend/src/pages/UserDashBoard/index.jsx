@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import MyAds from './components/MyAds';
-// import ProfileDetails from './components/ProfileDetails';
+import ProfileDetails from './components/ProfileDetails';
 // import MyBooking from './components/MyBooking';
 
 const UserDashboard = () => {
@@ -35,6 +35,7 @@ const UserDashboard = () => {
         </ul>
         <div className="mt-4">
           {selectedTab === 'MyAds' && <MyAds />}
+          {selectedTab === 'ProfileDetails' && <ProfileDetails />}
           
         </div>
       </div>

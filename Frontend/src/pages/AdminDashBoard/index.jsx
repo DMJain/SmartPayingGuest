@@ -1,55 +1,37 @@
-import AdReview from './components/AdReview';
+import { useState } from 'react';
+
+import AdReview from './components/AdReviewsPage';
 
 const AdminDashBoard = () => {
+    const [selectedTab, setSelectedTab] = useState('stats'); // Initial tab
+
+    const handleTabClick = (tabName) => {
+      setSelectedTab(tabName);
+    };
+  
     return (
-        <div className="flex justify-center items-center">
-            <div className="w-4/5">
-                <div role="tablist" className="tabs tabs-lifted">
-                    <input
-                        type="radio"
-                        name="my_tabs_2"
-                        role="tab"
-                        className="tab"
-                        aria-label="Tab 1"
-                        defaultChecked
-                    />
-                    <div
-                        role="tabpanel"
-                        className="tab-content bg-base-100 border-base-300 rounded-box p-6 w-full"
-                    >
-                        <AdReview />
-                    </div>
-
-                    <input
-                        type="radio"
-                        name="my_tabs_2"
-                        role="tab"
-                        className="tab"
-                        aria-label="Tab 2"
-                    />
-                    <div
-                        role="tabpanel"
-                        className="tab-content bg-base-100 border-base-300 rounded-box p-6 w-full"
-                    >
-                        Tab content 2
-                    </div>
-
-                    <input
-                        type="radio"
-                        name="my_tabs_2"
-                        role="tab"
-                        className="tab"
-                        aria-label="Tab 3"
-                    />
-                    <div
-                        role="tabpanel"
-                        className="tab-content bg-base-100 border-base-300 rounded-box p-6 w-full"
-                    >
-                        Tab content 3
-                    </div>
-                </div>
-            </div>
+      <div className="flex justify-center items-center">
+        <div className="w-3/5">
+          <ul className="flex space-x-4 border-b pb-2">
+            <li
+              className={`border-b-2 ${selectedTab === 'stats' ? 'border-secondary' : 'border-transparent'} hover:cursor-pointer`}
+              onClick={() => handleTabClick('stats')}
+            >
+              Stats
+            </li>
+            <li
+              className={`border-b-2 ${selectedTab === 'AdReview' ? 'border-secondary' : 'border-transparent'} hover:cursor-pointer`}
+              onClick={() => handleTabClick('AdReview')}
+            >
+              Ad Review
+            </li>
+          </ul>
+          <div className="mt-4">
+            {selectedTab === 'AdReview' && <AdReview />}
+            
+          </div>
         </div>
+      </div>
     );
 };
 

@@ -87,10 +87,14 @@ async function getAllPropertiesForAdmin(req, res) {
     return res.status(200).json({ status: 'success', data: properties });
 }
 
-async function approveProperty(req, res) {
+async function updatePropertyStatus(req, res) {
     const id = req.params.id;
+    const {status} = req.body;
+    if(!status) {
+        return res.status(400).json({ status: 'error', error: 'Status is required' });
+    }
     try{
-        const property = await PropertyService.update(id, {status: 'approved'});
+        const property = await PropertyService.update(id, {status: status});
         return res.status(200).json({ status: 'success', data: property });
     } catch (err) {
         console.log('Error', err);
@@ -119,6 +123,6 @@ module.exports = {
     updateProperty,
     deleteProperty,
     getAllPropertiesForAdmin,
-    approveProperty,
+    updatePropertyStatus,
     getOwnerPropertyByUd
 };

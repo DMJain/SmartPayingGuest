@@ -5,6 +5,8 @@ import {useGetPgByQuery} from '../../hooks/pg.hooks';
 
 import {fetchAd} from '../../store/slices/adSlice';
 
+import './styles.css';
+
 const HomePage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -58,18 +60,18 @@ const HomePage = () => {
 
                 </div>
                 <div>
-                    <div>
+                    <div className="flex gap-3 ">
                         {properties?.map((property) => (
-                            <div key={property._id} className="card bg-base-100 w-96 shadow-xl">
-                            <figure>
+                        <div key={property._id} className="card bg-base-100 border border-base-300 hompageCard shadow-xl">
+                            <figure className="h-2/5">
                                 <img
                                     src={property.images[0]}
                                     alt="Property Image"
                                 />
                             </figure>
-                            <div className="card-body">
+                            <div className="card-body h-3/5">
                                 <h2 className="card-title">{property.name} @ ₹ {property.price}</h2>
-                                <p>
+                                <p className="h-1/2 overflow-y-auto">
                                     {property.description}
                                 </p>
                                 <div className="card-actions justify-end">

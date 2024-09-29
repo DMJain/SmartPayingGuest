@@ -150,9 +150,21 @@ async function getBookingsPerProperty(req, res) {
 async function getAllOwnerBookings(req, res) {
     const userId = req.user._id;
     const bookings = await BookingService.getAll({ propertyOwnerId: userId });
-    res.status(200).json(bookings);
+    res.status(200).json({ status: 'success',data: bookings});
 }
 
-module.exports = { handleCreateBooking, verifyPayment, createBooking , getBookingsPerProperty, getAllOwnerBookings};
+async function getAllUserBookings(req, res) {
+    const userId = req.user._id;
+    const bookings = await BookingService.getAll({ userId: userId });
+    res.status(200).json({ status: 'success',data: bookings});
+}
+
+async function cancelBooking(req, res) {
+    const bookingId = req.params.bookingId;
+    const booking = await BookingService.cancelBooking(bookingId);
+    res.status(200).json({ status: 'success',data: booking});
+}
+
+module.exports = { handleCreateBooking, verifyPayment, createBooking , getBookingsPerProperty,cancelBooking, getAllOwnerBookings, getAllUserBookings};
 
 //module.exports = {createBooking, getBookingsPerProperty, getAllOwnerBookings, cancelBooking, getAllUserBookings};

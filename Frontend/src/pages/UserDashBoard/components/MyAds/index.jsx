@@ -1,6 +1,5 @@
 import { useGetPGByOwner } from '../../../../hooks/pg.hooks';
-import { useGetPropertyBooking } from '../../../../hooks/booking.hooks';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import BookingPopup from '../bookingPopUp';
 
@@ -31,7 +30,7 @@ const MyAds = () => {
                             ad.status === 'approved'
                                 ? 'border-success'
                                 : ad.status === 'rejected'
-                                ? 'border-failure'
+                                ? 'border-error'
                                 : ad.status === 'closed'
                                 ? 'border-base-300'
                                 : 'border-warning'
@@ -71,7 +70,7 @@ const MyAds = () => {
                                             ? ''
                                             : 'btn-disabled'
                                     }`}
-                                    onClick={(e) =>
+                                    onClick={() =>
                                         handleBookingClick(ad._id, ad.name)
                                     }
                                 >

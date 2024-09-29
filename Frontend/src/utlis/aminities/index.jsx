@@ -60,17 +60,17 @@ const amenitiesData = [
 ];
 
 const amenitiesIcons = {
-    wifi: <WifiIcon />,
-    parking: <LocalParkingIcon />,
-    gym: <FitnessCenterIcon />,
-    pool: <PoolIcon />,
-    restaurant: <RestaurantIcon />,
-    ac: <AcUnitIcon />,
-    tv: <TvIcon />,
-    fridge: <KitchenIcon />,
-    washingMachine: <LocalLaundryServiceIcon />,
-    garden: <LandscapeIcon />,
-    accessibility: <AccessibilityIcon />,
+    Wifi: <WifiIcon />,
+    Parking: <LocalParkingIcon />,
+    Gym: <FitnessCenterIcon />,
+    Pool: <PoolIcon />,
+    Restaurant: <RestaurantIcon />,
+    AC: <AcUnitIcon />,
+    TV: <TvIcon />,
+    Fridge: <KitchenIcon />,
+    WashingMachine: <LocalLaundryServiceIcon />,
+    Garden: <LandscapeIcon />,
+    Accessibility: <AccessibilityIcon />,
 };
 
 export default amenitiesData;

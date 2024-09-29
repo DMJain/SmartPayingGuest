@@ -6,6 +6,9 @@ import { useLoggedInUser } from '../../hooks/auth.hooks';
 
 import {setLocation, setCustomeLocation} from '../../store/slices/locationSlice';
 
+import {Search} from '../AlgoliaSearch/Search';
+
+
 const Navbar = memo(() => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -92,13 +95,14 @@ const Navbar = memo(() => {
                 </a>
             </div>
             <div className="flex-none gap-2">
-                <div className="form-control">
+                {/* <div className="form-control">
                     <input
                         type="text"
                         placeholder="Search"
                         className="input input-bordered w-24 md:w-auto"
                     />
-                </div>
+                </div> */}
+                <Search />
 
                 <div>
                     <ul className="menu menu-horizontal">

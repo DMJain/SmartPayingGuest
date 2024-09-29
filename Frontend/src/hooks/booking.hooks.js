@@ -43,17 +43,37 @@ export const useCreatreBooking = () => {
     });
 };
 
-// export const useGetPropertyBooking = (id) => {
-//   return useQuery({
-//     queryKey: ['booking', id],
-//     queryFn: async () => {
-//       const { data } = await apiInstance.get(`owner/property/${id}/bookings`);
-//       if (data.status === 'success') {
-//         return data.data || []; // Ensure an empty array if no bookings
-//       } else {
-//         console.warn('Failed to fetch Bookings:', data.message);
-//         return []; // Return an empty array on failure
-//       }
-//     },
-//   });
-// };
+export const useGetUserBooking = () => {
+  return useQuery({
+      queryKey: ['booking'],
+      queryFn: async () => {
+          try {
+              const { data } = await apiInstance.get(`/user/bookings`);
+              if (data.status === 'success') {
+                  return data.data || []; // Ensure a default empty array if `user` is undefined
+              } else {
+                  console.warn('Failed to fetch Bookings:', data.message);
+                  return []; // Return an empty array on failure
+              }
+          } catch (error) {
+              console.error('Error fetching Bookings:', error); // Handle errors
+              return []; // Return an empty array on error
+          }
+      },
+  });
+};
+
+export const useCancelBooking = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async ({id}) => {
+      const { data } = await apiInstance.delete(`/user/booking/${id}`);
+      return data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["booking"] });
+    },
+  });
+  return mutation;
+}

@@ -10,13 +10,13 @@ const ProfileDetails = () => {
   const { data : user } = useLoggedInUser();
 
   useEffect(() => { 
-    if (!userDataRefLoaded.current) {
+    if (user && !userDataRefLoaded.current) {
       userDataRefLoaded.current = true;
         setFirstName(user.firstName);
         setLastName(user.lastName);
         setEmail(user.email);
     }
-  }, []);
+  }, [user]);
 
   const handleEditClick = () => {
     setIsEditing(true);

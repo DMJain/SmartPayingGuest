@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import {amenitiesIcons} from '../../utlis/aminities';
+
 import './style.css';
 
 const PgDetailPage = () => {
@@ -89,17 +91,22 @@ const PgDetailPage = () => {
                         </div>
 
                         <div className="join-item p-5 border">
-                            <div className="text-xl">Description : </div>
-                            <div>{ad.amenities}</div>
+                            <div className="text-xl">Amenities : </div>
+                            <div className='flex gap-2'>{ad.amenities?.map((am, idx) => (
+                                <div key={idx}>
+                                    {amenitiesIcons[am] || ''} 
+                                    <span>{am} ,</span>
+                                </div>
+                            ))}</div>
                         </div>
 
                         <div className="join-ite p-5 borderm">
-                            <div className="text-xl">Description : </div>
+                            <div className="text-xl">Location : </div>
                             <div>Product Location</div>
                         </div>
 
                         <div className="join-item  p-5 border">
-                            <div className="text-xl">Description : </div>
+                            <div className="text-xl">Owner Information : </div>
                             <div className="flex justify-between items-center">
                                 <div>{ad.owner}</div>
                                 <div>Owner Contact</div>

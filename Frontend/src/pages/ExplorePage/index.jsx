@@ -1,111 +1,220 @@
-import { useNavigate } from "react-router-dom"; 
-import { useDispatch } from "react-redux";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import { useGetPgByQuery } from "../../hooks/pg.hooks";
+import { useGetPgByQuery } from '../../hooks/pg.hooks';
 
-import { fetchAd } from "../../store/slices/adSlice";
+import { amenitiesIcons } from '../../utlis/aminities';
+
+import { fetchAd } from '../../store/slices/adSlice';
 
 const ExplorePage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const {data : properties} = useGetPgByQuery(`city=Pune`);
+    const { data: properties } = useGetPgByQuery(`city=Pune`);
+    const uniqueStreets = [
+        ...new Set(properties?.map((property) => property.street)),
+    ];
+    const uniqueAmenities = [
+        ...new Set(properties?.flatMap((property) => property.amenities || [])),
+    ];
 
     const handleToAdPage = (id) => {
         navigate(`/ad/${id}`);
-    }
+    };
 
+    const [selectedStreet, setSelectedStreet] = useState(null);
+    const [selectedAmenities, setSelectedAmenities] = useState([]);
+    const [priceRange, setPriceRange] = useState([null, Infinity]);
+
+    const filteredProperties = properties?.filter((property) => {
+        const passesStreetFilter =
+            !selectedStreet || property.street === selectedStreet;
+        const passesAmenitiesFilter =
+            selectedAmenities.length === 0 ||
+            selectedAmenities.every((amenity) =>
+                property.amenities?.includes(amenity)
+            );
+        const passesPriceFilter =
+            property.price >= priceRange[0] && property.price <= priceRange[1];
+
+        return passesStreetFilter && passesAmenitiesFilter && passesPriceFilter;
+    });
+
+    const resetFilters = () => {
+        setSelectedStreet(null);
+        setSelectedAmenities([]);
+        setPriceRange([0, Infinity]);
+    };
+
+    const clearPriceFilters = () => {
+        setPriceRange([0, Infinity]);
+    };
     return (
         <div className="flex justify-center">
-        <div className="w-4/5 drawer lg:drawer-open">
-            <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content flex">
-                <label
-                    htmlFor="my-drawer-2"
-                    className="btn btn-primary drawer-button lg:hidden btn-circle swap swap-rotate"
-                >
-                    <input type="checkbox" />
+            <div className="w-4/5 flex flex-col items-center">
+                <div className="flex gap-4 items-center">
+                    <div className='border-r border-base-base-300'>
+                        <div className="flex gap-2 border-b border-base-300">
+                            {/* Street Filter */}
+                            <div className='p-2 border-r border-base-300'>
+                            <select
+                                id="streetFilter"
+                                className="select select-bordered"
+                                value={selectedStreet || ''}
+                                onChange={(e) =>
+                                    setSelectedStreet(e.target.value || null)
+                                }
+                            >
+                                <option value="">Select Area</option>
+                                {uniqueStreets.map((street) => (
+                                    <option key={street} value={street}>
+                                        {street}
+                                    </option>
+                                ))}
+                            </select>
+                            </div>
 
-                    {/* hamburger icon */}
-                    <svg
-                        className="swap-off fill-current"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 512 512"
-                    >
-                        <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                    </svg>
+                            {/* Price Filter */}
+                            <div className="flex gap-2 pt-2 pb-2">
+                                <label
+                                    htmlFor="minPrice"
+                                    className="input input-bordered flex items-center gap-2"
+                                >
+                                    Min Price:
+                                    <input
+                                        type="number"
+                                        id="minPrice"
+                                        value={priceRange[0]}
+                                        onChange={(e) => {
+                                            const newMin = Number(
+                                                e.target.value
+                                            );
+                                            setPriceRange([
+                                                newMin,
+                                                Math.max(newMin, priceRange[1]),
+                                            ]);
+                                        }}
+                                    />
+                                </label>
 
-                    {/* close icon */}
-                    <svg
-                        className="swap-on fill-current"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 512 512"
-                    >
-                        <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-                    </svg>
-                </label>
-                {/* Page content here */}
-                <div className="flex flex-col w-full items-center gap-10 p-10">
-                {properties?.map((property) => (
-                            <div key={property._id} className="card bg-base-100 w-96 shadow-xl">
-                            <figure>
+                                <label
+                                    htmlFor="maxPrice"
+                                    className="input input-bordered flex items-center gap-2"
+                                >
+                                    Max Price:
+                                    <input
+                                        type="number"
+                                        id="maxPrice"
+                                        value={priceRange[1]}
+                                        onChange={(e) => {
+                                            const newMax = Number(
+                                                e.target.value
+                                            );
+                                            setPriceRange([
+                                                Math.min(newMax, priceRange[0]),
+                                                newMax,
+                                            ]);
+                                        }}
+                                    />
+                                </label>
+
+                                <button
+                                    onClick={clearPriceFilters}
+                                    className="btn btn-link"
+                                >
+                                    Clear Price
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Amenities Filter */}
+                        <div className="flex items-center gap-2 p-2">
+                            <p className="text-lg">Amenities : {''}</p>
+                            {uniqueAmenities.map((amenity) => (
+                                <label
+                                    key={amenity}
+                                    className="flex items-center"
+                                >
+                                    <span className="p-1">{amenity}</span>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedAmenities.includes(
+                                            amenity
+                                        )}
+                                        className="checkbox checkbox-secondary checkbox-xs "
+                                        onChange={() => {
+                                            if (
+                                                selectedAmenities.includes(
+                                                    amenity
+                                                )
+                                            ) {
+                                                setSelectedAmenities(
+                                                    selectedAmenities.filter(
+                                                        (a) => a !== amenity
+                                                    )
+                                                );
+                                            } else {
+                                                setSelectedAmenities([
+                                                    ...selectedAmenities,
+                                                    amenity,
+                                                ]);
+                                            }
+                                        }}
+                                    />
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                    {/* Reset Button */}
+                    <button onClick={resetFilters} className="btn btn-base-300">
+                        Reset All Filters
+                    </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-10 p-10">
+                    {filteredProperties?.map((ad) => (
+                        <div
+                            key={ad._id}
+                            className="w-full flex justify-evenly items-center p-2 border rounded-md gap-2 h-52 shadow-xl"
+                        >
+                            <div className="w-1/4 h-44 border border-base-200 rounded-md">
                                 <img
-                                    src={property.images[0]}
-                                    alt="Property Image"
+                                    src={ad.images[0]}
+                                    alt={ad.name}
+                                    className="rounded-md object-contain h-full w-full"
                                 />
-                            </figure>
-                            <div className="card-body">
-                                <h2 className="card-title">{property.name}  @ ₹ {property.price} </h2>
-                                <p>
-                                    {property.description}
-                                </p>
-                                <div className="card-actions justify-end">
-                                    <button className="btn btn-primary" onClick={() => 
-                                        {dispatch(fetchAd(property._id));
-                                            handleToAdPage(property._id)}}>
+                            </div>
+                            <div className="flex flex-col gap-3">
+                                <div>
+                                    <h2 className="text-3xl">{ad.name}</h2>
+                                </div>
+                                <div className="text-xl">
+                                    Price : ₹ {ad.price}
+                                </div>
+                                <div className="flex gap-2 justify-end">
+                                    <div className="flex gap-2 overflow-x-auto">
+                                        {ad.amenities?.map((am, idx) => (
+                                            <div key={idx}>
+                                                {amenitiesIcons[am] || ''}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={() => {
+                                            dispatch(fetchAd(ad._id));
+                                            handleToAdPage(ad._id);
+                                        }}
+                                    >
                                         View
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        ))}
+                    ))}
                 </div>
             </div>
-            <div className="drawer-side">
-                <label
-                    htmlFor="my-drawer-2"
-                    aria-label="close sidebar"
-                    className="drawer-overlay"
-                ></label>
-                <ul className="menu bg-base-100 text-base-content min-h-full w-80 p-4">
-                    {/* Sidebar content here */}
-                    <h1 className="text-lg underline">Filter</h1>
-                    <li>
-                        <label className="label cursor-pointer">
-                            <span className="label-text">Remember me</span>
-                            <input
-                                type="checkbox"
-                                defaultChecked
-                                className="checkbox checkbox-primary rounded-full"
-                            />
-                        </label>
-                    </li>
-                    <li>
-                        <label className="label cursor-pointer">
-                            <span className="label-text">Remember me</span>
-                            <input
-                                type="checkbox"
-                                defaultChecked
-                                className="checkbox checkbox-primary rounded-full"
-                            />
-                        </label>
-                    </li>
-                </ul>
-            </div>
-        </div>
         </div>
     );
 };

@@ -2,7 +2,6 @@ const algoliasearch = require('algoliasearch');
 const { propertyValidator } = require('../lib/validators/property.validator');
 const PropertyService = require('../services/property.services');
 const BookingService = require('../services/booking.services');
-const { object } = require('zod');
 
 const client = algoliasearch(process.env.ALGOLIA_APP_ID, process.env.ALGOLIA_WRITE_KEY);
 const index = client.initIndex("stayNest");
@@ -17,15 +16,6 @@ async function createProperty(req, res) {
 
     try {
         const property = await PropertyService.create(validateReq.data);
-        const records = [{
-            objectID: property._id,
-            name: property.name,
-        }]
-        
-        // Index data to Algolia
-        index.saveObjects(records)
-            .then(() => console.log('Data indexed to Algolia'))
-            .catch(err => console.error('Error indexing to Algolia:', err));
         return res.status(201).json({ status: 'success', data: property });
     } catch (err) {
         console.log('Error', err);
@@ -108,6 +98,24 @@ async function updatePropertyStatus(req, res) {
     }
     try{
         const property = await PropertyService.update(id, {status: status});
+        if(status === 'approved') {
+            const records = [{
+                objectID: property._id,
+                name: property.name,
+                image : property.images[0],
+                street: property.street,
+                city: property.city,
+                price: property.price,
+                lat: property.lat,
+                lon: property.lon,
+                amenities: property.amenities,
+            }]
+            
+            // Index data to Algolia
+            index.saveObjects(records)
+                .then(() => console.log('Data indexed to Algolia'))
+                .catch(err => console.error('Error indexing to Algolia:', err));
+        }
         return res.status(200).json({ status: 'success', data: property });
     } catch (err) {
         console.log('Error', err);

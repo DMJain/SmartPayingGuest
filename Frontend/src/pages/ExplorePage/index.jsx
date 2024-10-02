@@ -1,218 +1,151 @@
 import { useState } from 'react';
+import { algoliasearch } from 'algoliasearch';
+import instantsearch from 'instantsearch.js';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useDispatch } from "react-redux";
+// import "instantsearch.css/themes/satellite.css";
+import './style.css';
+
+import {
+    searchBox,
+    hits,
+    configure,
+    pagination,
+} from 'instantsearch.js/es/widgets';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
-import { useGetPgByQuery } from '../../hooks/pg.hooks';
+import {fetchAd} from '../../store/slices/adSlice';
 
-import { amenitiesIcons } from '../../utlis/aminities';
-
-import { fetchAd } from '../../store/slices/adSlice';
+const AppID = import.meta.env.VITE_REACT_APP_ALGOLIA_APP_ID;
+const SearchKey = import.meta.env.VITE_REACT_APP_ALGOLIA_SEARCH_KEY;
+const indexName = 'stayNest';
+const city = 'Pune';
 
 const ExplorePage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { data: properties } = useGetPgByQuery(`city=Pune`);
-    const uniqueStreets = [
-        ...new Set(properties?.map((property) => property.street)),
-    ];
-    const uniqueAmenities = [
-        ...new Set(properties?.flatMap((property) => property.amenities || [])),
-    ];
+    const [hitsJsonArray, setHitsJsonArray] = useState([]);
+    const [center, setCenter] = useState([51.505, -0.09]);
+    const [key, setKey] = useState(0);
 
-    const handleToAdPage = (id) => {
-        navigate(`/ad/${id}`);
+    const navigateTo = async (url) => {
+        console.log(url);
+        await dispatch(fetchAd(url));
+        navigate(`/ad/${url}`);
     };
 
-    const [selectedStreet, setSelectedStreet] = useState(null);
-    const [selectedAmenities, setSelectedAmenities] = useState([]);
-    const [priceRange, setPriceRange] = useState([null, Infinity]);
+    useEffect(() => {
+        const searchClient = algoliasearch(AppID, SearchKey);
 
-    const filteredProperties = properties?.filter((property) => {
-        const passesStreetFilter =
-            !selectedStreet || property.street === selectedStreet;
-        const passesAmenitiesFilter =
-            selectedAmenities.length === 0 ||
-            selectedAmenities.every((amenity) =>
-                property.amenities?.includes(amenity)
-            );
-        const passesPriceFilter =
-            property.price >= priceRange[0] && property.price <= priceRange[1];
+        const search = instantsearch({
+            indexName: indexName,
+            searchClient,
+        });
 
-        return passesStreetFilter && passesAmenitiesFilter && passesPriceFilter;
-    });
+        search.addWidgets([
+            searchBox({
+                container: '.searchbox',
+            }),
 
-    const resetFilters = () => {
-        setSelectedStreet(null);
-        setSelectedAmenities([]);
-        setPriceRange([0, Infinity]);
-    };
-
-    const clearPriceFilters = () => {
-        setPriceRange([0, Infinity]);
-    };
-    return (
-        <div className="flex justify-center">
-            <div className="w-4/5 flex flex-col items-center">
-                <div className="flex gap-4 items-center">
-                    <div className='border-r border-base-base-300'>
-                        <div className="flex gap-2 border-b border-base-300">
-                            {/* Street Filter */}
-                            <div className='p-2 border-r border-base-300'>
-                            <select
-                                id="streetFilter"
-                                className="select select-bordered"
-                                value={selectedStreet || ''}
-                                onChange={(e) =>
-                                    setSelectedStreet(e.target.value || null)
-                                }
-                            >
-                                <option value="">Select Area</option>
-                                {uniqueStreets.map((street) => (
-                                    <option key={street} value={street}>
-                                        {street}
-                                    </option>
-                                ))}
-                            </select>
+            hits({
+                container: '.hits',
+                transformItems: (items) => {
+                    setHitsJsonArray(items);
+                    return items;
+                },
+                templates: {
+                    item: (hit, { html, components }) => html`
+                        <div class="hit-container">
+                            <div class="hit-image">
+                                <img src=${hit.image} alt=${hit.name} />
                             </div>
-
-                            {/* Price Filter */}
-                            <div className="flex gap-2 pt-2 pb-2">
-                                <label
-                                    htmlFor="minPrice"
-                                    className="input input-bordered flex items-center gap-2"
-                                >
-                                    Min Price:
-                                    <input
-                                        type="number"
-                                        id="minPrice"
-                                        value={priceRange[0]}
-                                        onChange={(e) => {
-                                            const newMin = Number(
-                                                e.target.value
-                                            );
-                                            setPriceRange([
-                                                newMin,
-                                                Math.max(newMin, priceRange[1]),
-                                            ]);
-                                        }}
-                                    />
-                                </label>
-
-                                <label
-                                    htmlFor="maxPrice"
-                                    className="input input-bordered flex items-center gap-2"
-                                >
-                                    Max Price:
-                                    <input
-                                        type="number"
-                                        id="maxPrice"
-                                        value={priceRange[1]}
-                                        onChange={(e) => {
-                                            const newMax = Number(
-                                                e.target.value
-                                            );
-                                            setPriceRange([
-                                                Math.min(newMax, priceRange[0]),
-                                                newMax,
-                                            ]);
-                                        }}
-                                    />
-                                </label>
-
-                                <button
-                                    onClick={clearPriceFilters}
-                                    className="btn btn-link"
-                                >
-                                    Clear Price
+                            <div class="hit-content">
+                                <h1>
+                                    ${components.Highlight({
+                                        hit,
+                                        attribute: 'name',
+                                    })}
+                                </h1>
+                                <p>₹ ${hit.price}</p>
+                                <button onClick="${(e) => {e.preventDefault();
+                                    navigateTo(hit.objectID);}}">
+                                    Veiw
                                 </button>
                             </div>
                         </div>
+                    `,
+                },
+            }),
+            pagination({
+                container: '.pagenation',
+                cssClasses: {
+                    root: 'pagination-container',
+                    item: 'item-custom-css-class',
+                  },
+            }),
+            configure({
+                hitsPerPage: 10,
+                filters:`city:${city}`,
+            })
+        ]);
 
-                        {/* Amenities Filter */}
-                        <div className="flex items-center gap-2 p-2">
-                            <p className="text-lg">Amenities : {''}</p>
-                            {uniqueAmenities.map((amenity) => (
-                                <label
-                                    key={amenity}
-                                    className="flex items-center"
-                                >
-                                    <span className="p-1">{amenity}</span>
-                                    <input
-                                        type="checkbox"
-                                        checked={selectedAmenities.includes(
-                                            amenity
-                                        )}
-                                        className="checkbox checkbox-secondary checkbox-xs "
-                                        onChange={() => {
-                                            if (
-                                                selectedAmenities.includes(
-                                                    amenity
-                                                )
-                                            ) {
-                                                setSelectedAmenities(
-                                                    selectedAmenities.filter(
-                                                        (a) => a !== amenity
-                                                    )
-                                                );
-                                            } else {
-                                                setSelectedAmenities([
-                                                    ...selectedAmenities,
-                                                    amenity,
-                                                ]);
-                                            }
-                                        }}
-                                    />
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-                    {/* Reset Button */}
-                    <button onClick={resetFilters} className="btn btn-base-300">
-                        Reset All Filters
-                    </button>
+        search.start();
+    }, []);
+
+    useEffect(() => {
+        if (hitsJsonArray.length > 0) {
+            setCenter([hitsJsonArray[0].lat, hitsJsonArray[0].lon]);
+            setKey((prev) => prev + 1);
+        }
+    }, [hitsJsonArray]);
+
+    console.log(hitsJsonArray);
+
+    return (
+        <div className="flex justify-center h-full">
+            <div className="flex explore-container p-2">
+                <div className="flex flex-col gap-2 p-2">
+                    <div className="searchbox sticky top-0"></div>
+                    <div className="hits overflow-auto flex-grow p-1"></div>
+                    <div className='pagenation flex w-full justify-center sticky bottom-0 border-t pt-2 border-base-300'></div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-10 p-10">
-                    {filteredProperties?.map((ad) => (
-                        <div
-                            key={ad._id}
-                            className="w-full flex justify-evenly items-center p-2 border rounded-md gap-2 h-52 shadow-xl"
+                <div className="h-full w-full border border-primary rounded-2xl">
+                    {hitsJsonArray && (
+                        <MapContainer
+                            key={key}
+                            center={center}
+                            zoom={13}
+                            scrollWheelZoom={false}
+                            className="w-full h-full rounded-2xl"
                         >
-                            <div className="w-1/4 h-44 border border-base-200 rounded-md">
-                                <img
-                                    src={ad.images[0]}
-                                    alt={ad.name}
-                                    className="rounded-md object-contain h-full w-full"
-                                />
-                            </div>
-                            <div className="flex flex-col gap-3">
-                                <div>
-                                    <h2 className="text-3xl">{ad.name}</h2>
-                                </div>
-                                <div className="text-xl">
-                                    Price : ₹ {ad.price}
-                                </div>
-                                <div className="flex gap-2 justify-end">
-                                    <div className="flex gap-2 overflow-x-auto">
-                                        {ad.amenities?.map((am, idx) => (
-                                            <div key={idx}>
-                                                {amenitiesIcons[am] || ''}
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            {hitsJsonArray.map((item) => (
+                                <Marker
+                                    key={item.objectID}
+                                    position={[item.lat, item.lon]}
+                                >
+                                    <Popup>
+                                        <div className="flex gap-2 w-40 max-h-24">
+                                            <img
+                                                src={item.image}
+                                                alt=""
+                                                className="border border-primary h-16 w-12 object-cover rounded"
+                                            />
+                                            <div className="flex flex-col justify-between overflow-hidden">
+                                                <b>{item.name}</b>
+                                                <b>₹ {item.price}</b>
                                             </div>
-                                        ))}
-                                    </div>
-                                    <button
-                                        className="btn btn-primary"
-                                        onClick={() => {
-                                            dispatch(fetchAd(ad._id));
-                                            handleToAdPage(ad._id);
-                                        }}
-                                    >
-                                        View
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                                        </div>
+                                    </Popup>
+                                </Marker>
+                            ))}
+                        </MapContainer>
+                    )}
                 </div>
             </div>
         </div>

@@ -46,7 +46,13 @@ const propertySchema = new Schema(
         pinCode: {
             type: Number,
             required: true,
-        },      
+        },
+        lat: {
+            type: String,
+        },
+        lon: {
+            type: String,
+        },  
         phoneNumber: {
             type: String,
             match: /^[6-9]\d{9}$/,

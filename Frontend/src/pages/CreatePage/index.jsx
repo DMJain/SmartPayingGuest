@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { usePostPg } from '../../hooks/pg.hooks';
@@ -85,7 +85,7 @@ const CreatePage = () => {
       }, []);
 
     const handleMap = async () => {
-        const originalAddress = 'Stanza Living Tallinn House, pune';
+        const originalAddress = `${name} ${plot} ${street} ${city} ${state} ${country} ${pinCode}`;
         const encodedAddress = encodeURIComponent(originalAddress);
         const url = `https://us1.locationiq.com/v1/search?key=pk.d3c85c6c9fd98d35970b26464c3e5ae3&q=${encodedAddress}&format=json&`;
 
@@ -113,6 +113,8 @@ const CreatePage = () => {
                 state,
                 country,
                 pinCode: Number(pinCode),
+                lat: lat,
+                lon: lng,
                 phoneNumber,
                 price: Number(price),
                 amenities,
@@ -126,6 +128,8 @@ const CreatePage = () => {
                     description,
                     price: Number(price),
                     imageURLs: images,
+                    lat: lat,
+                    lon: lng,
                     amenities,
                     owner: `${user.firstName} ${user.lastName}`,
                 })
@@ -137,6 +141,8 @@ const CreatePage = () => {
             setState('');
             setCountry('');
             setPinCode('');
+            setLat(null);
+            setlng(null);
             setPhoneNumber('');
             setPrice('');
             setAmenities([]);
@@ -146,7 +152,7 @@ const CreatePage = () => {
             setImage2(null);
             setImage3(null);
             setImage4(null);
-            navigate('/ad');
+            navigate(`/ad/${data._id}`);
         } catch (error) {
             console.error('Error creating PG:', error);
         } finally {

@@ -6,9 +6,6 @@ import { useLoggedInUser } from '../../hooks/auth.hooks';
 
 import {setLocation, setCustomeLocation} from '../../store/slices/locationSlice';
 
-import {Search} from '../AlgoliaSearch/Search';
-
-
 const Navbar = memo(() => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -102,7 +99,6 @@ const Navbar = memo(() => {
                         className="input input-bordered w-24 md:w-auto"
                     />
                 </div> */}
-                <Search />
 
                 <div>
                     <ul className="menu menu-horizontal">

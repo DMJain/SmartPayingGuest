@@ -16,9 +16,11 @@ import OnSuccess from './pages/bookingPage/onSuccess';
 
 function App() {
     return (
-        <>
+        <>  
+
             <Navbar />
-            <div className="p-5">
+
+            <div className="main-content">
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/explore" element={<ExplorePage />} />

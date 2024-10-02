@@ -1,0 +1,4 @@
+.main-content {
+    height: calc(100vh - 68px); /* Assuming navbar height is 64px. Adjust if needed */
+    overflow-y: auto; /* Add scrollbar if content exceeds height */
+  }

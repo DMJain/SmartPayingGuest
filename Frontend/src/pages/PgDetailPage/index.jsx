@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+
 import {amenitiesIcons} from '../../utlis/aminities';
 
 import './style.css';
@@ -114,6 +116,26 @@ const PgDetailPage = () => {
                             </div>
                         </div>
                     </div>
+
+                    <div className="border h-80 rounded-lg border-primary">
+                                    {ad.lon && <MapContainer
+                                        
+                                        center={[ad.lat, ad.lon]}
+                                        zoom={15}
+                                        scrollWheelZoom={false}
+                                        className='w-full h-full rounded-lg'
+                                    >
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        <Marker position={[ad.lat, ad.lon]}>
+                                            <Popup>
+                                                Set Location <br />{' '}
+                                            </Popup>
+                                        </Marker>
+                                    </MapContainer>}
+                                </div>
                 </div>
             </div>
         </div>

@@ -8,6 +8,7 @@ const router = express.Router();
 router.use(checkifLoggedIn);
 
 router.get("/chat-rooms", chatController.getChatRooms);
+router.get("/chat-room/:id", chatController.getChatRoom);
 router.post("/create-room", chatController.createChatRoom);
 
 module.exports = router;

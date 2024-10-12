@@ -21,9 +21,9 @@ export const useCreatreRoom = () => {
     return mutation;
   };
 
-  export const useGetUserChatRoom = () => {
+  export const useGetUserChatRooms = () => {
     return useQuery({
-        queryKey: ['PG'],
+        queryKey: ['chat'],
         queryFn: async () => {
             try {
                 const { data } = await apiInstance.get('/chat/chat-rooms');
@@ -40,3 +40,23 @@ export const useCreatreRoom = () => {
         },
     });
 };
+
+export const useGetRoomDetail = (id) => {
+  return useQuery({
+    queryKey: ['chat', id],
+    queryFn: async () => {
+        try {
+            const { data } = await apiInstance.get(`/chat/chat-room/${id}`);
+            if (data.status === 'success') {
+                return data.data || []; // Ensure a default empty array if `user` is undefined
+            } else {
+                console.warn('Failed to fetch Chats:', data.message);
+                return []; // Return an empty array on failure
+            }
+        } catch (error) {
+            console.error('Error fetching Chats:', error); // Handle errors
+            return []; // Return an empty array on error
+        }
+    },
+});
+}

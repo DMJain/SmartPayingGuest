@@ -132,6 +132,11 @@ const CreatePage = () => {
                     lon: lng,
                     amenities,
                     owner: `${user.firstName} ${user.lastName}`,
+                    plot,
+                    street,
+                    city,
+                    pinCode,
+                    owner_id: user._id,
                 })
             );
             setName('');
@@ -171,7 +176,7 @@ const CreatePage = () => {
     }, [selectedAminties]);
 
     return (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mt-4">
             <div className="w-3/5 flex flex-col items-center gap-5">
                 <div>
                     <h1 className="text-3xl font-bold">Create an Ad</h1>

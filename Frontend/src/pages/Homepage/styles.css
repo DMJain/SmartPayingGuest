@@ -1,4 +1,69 @@
-.hompageCard{
-    width: 330px;
-    height: 500px;
+.homePage {
+    display: flex;
+    height: 100%;
+}
+
+.textContainer {
+    width: 50%;
+    padding: 8rem;
+}
+
+
+
+.wrapper {
+    padding-right: 100px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 50px;
+
+    height: 100%;
+}
+
+.title {
+    font-size: 64px;
+}
+
+.boxes {
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.boxes h1 {
+    font-size: 36px;
+}
+
+.boxes h2 {
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.imgContainer {
+    flex: 2;
+
+    background-color: #fcf5f3;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+}
+
+.imgContainer img {
+    width: 115%;
+
+    position: absolute;
+
+    right: 0;
+}
+
+.text-outline {
+    text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.815), 1px -1px 0 rgba(0, 0, 0, 0),
+        -1px 1px 0 rgba(0, 0, 0, 0), 1px 1px 0 rgba(255, 255, 255, 0);
 }

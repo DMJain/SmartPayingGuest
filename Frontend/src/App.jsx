@@ -10,6 +10,7 @@ import CreatePage from './pages/CreatePage';
 import BookingPage from './pages/bookingPage';
 import AdminDashBoard from './pages/AdminDashBoard';
 import UserDashBoard from './pages/UserDashBoard';
+import ChatPage from './pages/ChatPage';
 
 import './App.css';
 import OnSuccess from './pages/bookingPage/onSuccess';
@@ -32,6 +33,7 @@ function App() {
                     <Route path="/admin" element={<AdminDashBoard />} />
                     <Route path="/user" element={<UserDashBoard />} />
                     <Route path="/success" element={<OnSuccess />} />
+                    <Route path="/chat" element={<ChatPage />} />
                 </Routes>
             </div>
         </>

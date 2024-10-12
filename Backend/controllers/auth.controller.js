@@ -55,6 +55,7 @@ async function CurrentUser(req, res) {
     if (!req.user) return res.json({ isLoggedIn: false });
 
     const user = await User.findById(req.user._id).select({
+        _id: true,
         firstName: true,
         lastName: true,
         email: true,

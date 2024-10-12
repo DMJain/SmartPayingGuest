@@ -11,7 +11,7 @@ const UserDashboard = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center mt-4">
       <div className="w-3/5">
         <ul className="flex space-x-4 border-b pb-2">
           <li

@@ -1,5 +1,4 @@
 const {Schema, model} = require('mongoose');
-const { date, string } = require('zod');
 
 const bookingSchema = new Schema({
     propertyId: {

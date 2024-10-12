@@ -66,6 +66,10 @@ const Navbar = memo(() => {
         navigate('/sign-in');
     };
 
+    const handletoExplore = () => {
+        navigate('/explore');
+    };
+
     const handleLocation = () => {
         if(!location.custome) return;
         fetchLocation();
@@ -77,11 +81,11 @@ const Navbar = memo(() => {
       }
 
     return (
-        <div className='flex justify-center bg-primary'>
-        <div className="navbar bg-primary text-primary-content w-3/5">
+        <div className='flex justify-center bg-transparent z-50  border-b border-b-secondary'>
+        <div className="navbar bg-transparent text-primary-content w-3/5">
             <div className="flex-1">
                 <a
-                    className="btn btn-ghost bg-base-100 rounded-full h-12"
+                    className="btn btn-ghost bg-base-100 h-12"
                     onClick={handleLogoClick}
                 >
                     <img
@@ -92,16 +96,15 @@ const Navbar = memo(() => {
                 </a>
             </div>
             <div className="flex-none gap-2">
-                {/* <div className="form-control">
-                    <input
-                        type="text"
-                        placeholder="Search"
-                        className="input input-bordered w-24 md:w-auto"
-                    />
-                </div> */}
+                {/*  */}
+                <div className="form-control">
+                    <a className="btn btn-ghost bg-base-100"
+                    onClick={handletoExplore}>Explore</a>
+                </div>
 
-                <div>
-                    <ul className="menu menu-horizontal">
+                <div style={{ position: 'relative', zIndex: 9999 }}>
+                    
+                    <ul className="menu menu-horizontal text-primary z-50">
                         <li>
                             <details>
                                 <summary>{city}</summary>
@@ -162,7 +165,7 @@ const Navbar = memo(() => {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[10] mt-3 w-52 p-2 shadow"
+                            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[50] mt-3 w-52 p-2 shadow"
                         >
                             <li>
                                 <a className="justify-between" onClick={() => navigate('/user')}>
@@ -177,6 +180,9 @@ const Navbar = memo(() => {
                                     Post Your PG
                                     <span className="badge">+</span>
                                 </a>
+                            </li>
+                            <li>
+                                <a onClick={() => navigate('/chat')}>Messages</a>
                             </li>
                             <li>
                                 <a onClick={handleLogOut}>Logout</a>

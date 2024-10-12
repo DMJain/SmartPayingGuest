@@ -11,7 +11,11 @@ const initialState = {
     lat: null,
     lon: null,
     isLoading: false,
-    location: null,
+    plot: null,
+    street: null,
+    city: null,
+    owner: null,
+    pinCode: null,
     owner_id: null,
 }
 
@@ -42,6 +46,11 @@ const adSlice = createSlice({
             state.imageURLs = action.payload.imageURLs;
             state.amenities = action.payload.amenities;
             state.owner = action.payload.owner;
+            state.plot = action.payload.plot;
+            state.street = action.payload.street;
+            state.city = action.payload.city;
+            state.pinCode = action.payload.pinCode;
+            state.owner_id = action.payload.owner_id;
         }
     },
     extraReducers: (builder) => {
@@ -59,6 +68,11 @@ const adSlice = createSlice({
             state.amenities = action.payload.amenities;
             state.owner = action.payload.ownerName;
             state.isLoading = false;
+            state.plot = action.payload.plot;
+            state.street = action.payload.street;
+            state.city = action.payload.city;
+            state.pinCode = action.payload.pinCode;
+            state.owner_id = action.payload.owner;
         });
     }
 });

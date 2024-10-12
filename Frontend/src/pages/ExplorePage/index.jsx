@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { algoliasearch } from 'algoliasearch';
 import instantsearch from 'instantsearch.js';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import "instantsearch.css/themes/satellite.css";
 import './style.css';
 
@@ -20,11 +20,11 @@ import {fetchAd} from '../../store/slices/adSlice';
 const AppID = import.meta.env.VITE_REACT_APP_ALGOLIA_APP_ID;
 const SearchKey = import.meta.env.VITE_REACT_APP_ALGOLIA_SEARCH_KEY;
 const indexName = 'stayNest';
-const city = 'Pune';
 
 const ExplorePage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const location = useSelector((state) => state.location);
     const [hitsJsonArray, setHitsJsonArray] = useState([]);
     const [center, setCenter] = useState([51.505, -0.09]);
     const [key, setKey] = useState(0);
@@ -86,12 +86,12 @@ const ExplorePage = () => {
             }),
             configure({
                 hitsPerPage: 10,
-                filters:`city:${city}`,
+                filters:`city:${location.location}`,
             })
         ]);
 
         search.start();
-    }, []);
+    }, [location]);
 
     useEffect(() => {
         if (hitsJsonArray.length > 0) {
@@ -104,8 +104,8 @@ const ExplorePage = () => {
 
     return (
         <div className="flex justify-center h-full">
-            <div className="flex explore-container p-2">
-                <div className="flex flex-col gap-2 p-2">
+            <div className="flex explore-container p-2 gap-2">
+                <div className="flex flex-col gap-2 border rounded-3xl">
                     <div className="searchbox sticky top-0"></div>
                     <div className="hits overflow-auto flex-grow p-1"></div>
                     <div className='pagenation flex w-full justify-center sticky bottom-0 border-t pt-2 border-base-300'></div>

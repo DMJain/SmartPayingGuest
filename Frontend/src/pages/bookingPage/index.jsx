@@ -90,7 +90,7 @@ useEffect(() => {
 
 
     return (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mt-4">
             <div className="w-3/5 flex flex-col items-center gap-5">
                 <div>
                     <h1 className="text-3xl font-bold">Book a Visit</h1>
